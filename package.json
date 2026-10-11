@@ -1,0 +1,83 @@
+{
+  "name": "zhiheng-grading",
+  "version": "0.3.1",
+  "private": true,
+  "description": "知衡 · 高中数学阅卷与学情分析工作台",
+  "author": "Zhiheng",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "server": "node server/index.mjs",
+    "build": "tsc -b && vite build",
+    "test": "node --test tests/*.test.mjs",
+    "desktop": "electron .",
+    "pack": "npm run build && electron-builder --win --dir",
+    "dist": "npm run build && electron-builder --win nsis portable"
+  },
+  "build": {
+    "appId": "local.zhiheng.grading",
+    "productName": "知衡",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "server/**/*",
+      "electron/**/*",
+      "package.json",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "electron/assets/icon.ico",
+      "signExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "知衡",
+      "artifactName": "Zhiheng-Setup-${version}-${arch}.${ext}"
+    },
+    "artifactName": "Zhiheng-${version}-${arch}.${ext}",
+    "portable": {
+      "artifactName": "Zhiheng-Portable-${version}-${arch}.${ext}"
+    }
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "lucide-react": "^1.42.0",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@playwright/cli": "^0.1.19",
+    "@types/node": "^26.5.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.2.0",
+    "electron-builder": "^26.15.3",
+    "prettier": "^3.9.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2"
+  },
+  "overrides": {
+    "brace-expansion@^1.1.7": "1.1.21",
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

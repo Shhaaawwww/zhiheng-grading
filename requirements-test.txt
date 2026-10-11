@@ -1,0 +1,4 @@
+pypdfium2>=4.30
+pypdf>=5
+Pillow>=11
+reportlab>=4

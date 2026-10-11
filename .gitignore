@@ -1,0 +1,24 @@
+node_modules/
+dist/
+release/
+output/
+.data/
+*.sqlite*
+*.zhb
+*.log
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.playwright-mcp/
+.playwright-cli/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc
+
+
+# Workspace file-governance runtime
+.workspace-file/cache.json
+.workspace-file/runtime.lock
+.workspace-file/*.tmp
