@@ -1,4 +1,4 @@
-// Fault injection only: distinct from scripts/release-live.mjs real paid tests.
+// Fault injection only: checks software recovery, not real-model grading accuracy.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';

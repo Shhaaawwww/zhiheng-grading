@@ -56,4 +56,7 @@ Git keeps its history. Keep this document short and update it only for important
 - Add only durable file-management guidance here.
 - `docs/audit-open-source.md` 保存当前独立 API 能力、开源审核和验证边界；历史交付验收报告保留原口径，不覆盖为新结果。
 - `.github/workflows/ci.yml` 为源码持续集成入口；`scripts/package-source.py` 与 `scripts/check-release-secrets.py` 为源码发布及凭据检查入口。发布物保存在已使用的 `release/`，核验产物保存在 `output/`，不加入公开源码。
-- GitHub 发布从白名单源码生成 `output/github-publication/repository/` 的独立 Git 仓库；只推送经审核的源码与初始提交，不把含正式资料的原工作区或历史输出目录直接推送。发布前的隐私检查记录保存在 `output/github-publication/`，不随源码公开。
+- GitHub 发布从白名单源码同步到 `output/github-publication/repository/` 的独立 Git 仓库；推送前核对实际提交和版本历史，不把含正式资料的原工作区或历史输出目录直接推送。隐私检查与发布记录保存在 `output/github-publication/`，不随源码公开。
+
+- `archive/historical-delivery/` 保存旧交付进度、设计方案、验收报告及历史实测工具，只作本机参考，不进入公开源码或当前维护流程。
+- `scripts/release_safety.py` 明确列出当前公开脚本；运行、离线回归、桌面检查、指南生成和源码发布工具保留在 `scripts/`，新增公开工具需更新白名单并审核。

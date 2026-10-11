@@ -1,12 +1,13 @@
 param(
   [ValidateSet('portable','unpacked','installed')][string]$Kind = 'portable',
   [string]$Database = '',
-  [string]$InstalledExecutable = ''
+  [string]$InstalledExecutable = '',
+  [string]$Report = ''
 )
 $ErrorActionPreference = 'Stop'
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $version = (Get-Content -LiteralPath (Join-Path $taskRoot 'package.json') -Raw | ConvertFrom-Json).version
-$runRoot = Join-Path $taskRoot ('output\desktop-smoke-030\' + $Kind + '-' + [Guid]::NewGuid().ToString('N').Substring(0,8))
+$runRoot = Join-Path $taskRoot ('output\desktop-smoke\' + $Kind + '-' + [Guid]::NewGuid().ToString('N').Substring(0,8))
 New-Item -ItemType Directory -Path (Join-Path $runRoot 'profile\workspace') -Force | Out-Null
 if ($Database) {
   Copy-Item -LiteralPath ([IO.Path]::GetFullPath($Database)) -Destination (Join-Path $runRoot 'profile\workspace\zhiheng.sqlite')
@@ -16,10 +17,14 @@ $executable = switch ($Kind) {
   'unpacked' { Join-Path $taskRoot 'release\win-unpacked\知衡.exe' }
   'installed' { [IO.Path]::GetFullPath($InstalledExecutable) }
 }
-$report = Join-Path $taskRoot 'output\real-api\release-030\ap25-q6\学情-全班.html'
+if ($Report) {
+  $Report = [IO.Path]::GetFullPath($Report)
+  if (-not (Test-Path -LiteralPath $Report -PathType Leaf)) { throw 'The requested report file does not exist.' }
+}
 $env:ZHIHENG_DATA_DIR = Join-Path $runRoot 'profile'
 $env:ZHIHENG_SMOKE = Join-Path $runRoot 'window.png'
-if (Test-Path -LiteralPath $report) { $env:ZHIHENG_SMOKE_REPORT = $report }
+Remove-Item Env:ZHIHENG_SMOKE_REPORT -ErrorAction SilentlyContinue
+if ($Report) { $env:ZHIHENG_SMOKE_REPORT = $Report }
 try {
   $process = Start-Process -FilePath $executable -WorkingDirectory $taskRoot -WindowStyle Hidden -PassThru
   $deadline = (Get-Date).AddSeconds(55)

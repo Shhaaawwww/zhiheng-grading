@@ -41,7 +41,7 @@ test('unapproved tables, private configuration, databases and PDFs fail before r
   mkdirSync(path.dirname(target));
   const original = Buffer.from('previous reviewed package');
   writeFileSync(target, original);
-  for (const name of ['src/roster.xlsx', 'server/.env.local', 'server/private.sqlite-wal', 'scripts/network.json', 'public/help/student.pdf']) {
+  for (const name of ['src/roster.xlsx', 'server/.env.local', 'server/private.sqlite-wal', 'scripts/network.json', 'scripts/legacy-runner.mjs', 'public/help/student.pdf']) {
     const file = path.join(directory, name);
     writeFileSync(file, 'Private fixture');
     const result = run(packager, directory);
@@ -50,6 +50,18 @@ test('unapproved tables, private configuration, databases and PDFs fail before r
     assert.deepEqual(readFileSync(target), original);
     rmSync(file);
   }
+});
+
+test('local archives stay out of source packages even when they contain private material', t => {
+  const directory = fixture(t);
+  mkdirSync(path.join(directory, 'archive/historical-delivery'), { recursive: true });
+  const token = ['sk', 'proj', 'F'.repeat(40)].join('-');
+  writeFileSync(path.join(directory, 'archive/historical-delivery/private-notes.md'), token);
+  const result = run(packager, directory);
+  assert.equal(result.status, 0, result.stderr + result.stdout);
+  const validation = spawnSync(python, ['-c', 'import json,sys,zipfile; z=zipfile.ZipFile(sys.argv[1]); names=z.namelist(); data=b"".join(z.read(n) for n in names); safe=not any("/archive/" in n for n in names) and sys.argv[2].encode() not in data; print(json.dumps({"archiveExcluded":safe})); sys.exit(0 if safe else 1)', JSON.parse(result.stdout).output, token], { encoding: 'utf8' });
+  assert.equal(validation.status, 0, validation.stderr + validation.stdout);
+  assert.equal(JSON.parse(validation.stdout).archiveExcluded, true);
 });
 
 test('provider tokens and private keys are blocked without printing their values, including with Python optimization', t => {

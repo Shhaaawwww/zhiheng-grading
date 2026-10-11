@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 import path from "node:path";
 
 const folder = path.resolve("public/help");
+const { version } = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 mkdirSync(folder, { recursive: true });
 mkdirSync("release", { recursive: true });
 const escape = (text) =>
@@ -17,7 +18,7 @@ const escape = (text) =>
   );
 const pages = chapters.map(
   (chapter, index) =>
-    `<section class="guide-page"><header><span>知衡 · 教师上手指南</span><span>${index + 1} / ${chapters.length + 1}</span></header><h1>${escape(chapter.title)}</h1><p class="subtitle">${escape(chapter.subtitle)}</p>${index === 0 ? '<div class="route"><b>建班级和考试</b><span>→</span><b>导入 PDF 自动识别</b><span>→</span><b>人工录分或 AI 预批</b><span>→</span><b>看学情与报告</b></div>' : ""}<ol>${chapter.steps.map((s) => `<li><h2>${escape(s.title)}</h2><p>${escape(s.text)}</p></li>`).join("")}</ol><aside>${escape(chapter.tip)}</aside>${chapter.image ? `<figure><img src="${escape(chapter.image)}" alt="${escape(chapter.caption)}"><figcaption>${escape(chapter.caption)} 图中班级与成绩均为虚构的验收或示例数据。</figcaption></figure>` : '<div class="service-note"><strong>不需要先学 AI 知识</strong><p>日常使用的中心仍是教师确认的题目、分数和备注。连接服务可以请人协助，是否采用建议由教师决定。</p></div>'}<footer>对应软件 0.3.0 · 软件内可随时点击“使用帮助”或“本页怎么用”查看同样的操作说明。</footer></section>`,
+    `<section class="guide-page"><header><span>知衡 · 教师上手指南</span><span>${index + 1} / ${chapters.length + 1}</span></header><h1>${escape(chapter.title)}</h1><p class="subtitle">${escape(chapter.subtitle)}</p>${index === 0 ? '<div class="route"><b>建班级和考试</b><span>→</span><b>导入 PDF 自动识别</b><span>→</span><b>人工录分或 AI 预批</b><span>→</span><b>看学情与报告</b></div>' : ""}<ol>${chapter.steps.map((s) => `<li><h2>${escape(s.title)}</h2><p>${escape(s.text)}</p></li>`).join("")}</ol><aside>${escape(chapter.tip)}</aside>${chapter.image ? `<figure><img src="${escape(chapter.image)}" alt="${escape(chapter.caption)}"><figcaption>${escape(chapter.caption)} 图中班级与成绩均为虚构的验收或示例数据。</figcaption></figure>` : '<div class="service-note"><strong>不需要先学 AI 知识</strong><p>日常使用的中心仍是教师确认的题目、分数和备注。连接服务可以请人协助，是否采用建议由教师决定。</p></div>'}<footer>对应软件 ${escape(version)} · 软件内可随时点击“使用帮助”或“本页怎么用”查看同样的操作说明。</footer></section>`,
 );
 pages.push(
   `<section class="guide-page"><header><span>知衡 · 教师上手指南</span><span>${chapters.length + 1} / ${chapters.length + 1}</span></header><h1>常见问题</h1><p class="subtitle">遇到问题时，先按这里的方法检查。</p><div class="faq-list">${faqs.map((f) => `<article><h2>${escape(f.q)}</h2><p>${escape(f.a)}</p></article>`).join("")}</div><footer>本指南与软件内帮助来自同一份说明。实际智能识别及评分质量仍需结合所用服务和匿名样卷核对。</footer></section>`,

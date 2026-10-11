@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { version } from "../package.json";
 import {
   LayoutDashboard,
   Users,
@@ -151,7 +152,7 @@ export default function App() {
           </div>
         </div>
         <div className="workspace-label">
-          教师工作空间 <span>V0.3.0</span>
+          教师工作空间 <span>V{version}</span>
         </div>
         <nav aria-label="主导航">
           {navs.map(({ page: p, name, icon: Icon }, i) => (

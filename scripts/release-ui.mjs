@@ -4,7 +4,7 @@ import { createApp } from '../server/app.mjs';
 import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
-const out = path.resolve('output/playwright/release-030'); mkdirSync(out, { recursive: true });
+const out = path.resolve('output/playwright/release-ui'); mkdirSync(out, { recursive: true });
 const instance = createApp({ dataDir: mkdtempSync(path.join(out, 'workspace-')) });
 const server = instance.app.listen(0, '127.0.0.1'); await new Promise(r => server.once('listening', r));
 const base = `http://127.0.0.1:${server.address().port}`;

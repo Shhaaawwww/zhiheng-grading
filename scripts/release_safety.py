@@ -6,11 +6,15 @@ ROOT_FILES = frozenset({
     '.gitignore', 'package.json', 'package-lock.json', 'tsconfig.json',
     'vite.config.ts', 'index.html', 'README.md', 'LICENSE',
     'THIRD_PARTY_NOTICES.md', 'CONTRIBUTING.md', 'SECURITY.md',
-    'CHANGELOG.md', 'TESTING.md', 'requirements-test.txt', 'DELIVERY_PROGRESS.md',
-    'FILE_MANAGEMENT.md',
-    '教师操作指南-0.3.md', '交付验收报告-0.3.0.md',
-    'AI辅助逐点评阅升级方案-v0.3.md', 'DELIVERY_PROGRESS-0.3.md',
-    '教师工作流与可靠学情分析最终方案.md',
+    'CHANGELOG.md', 'TESTING.md', 'FILE_MANAGEMENT.md',
+    '教师操作指南-0.3.md',
+})
+PUBLIC_SCRIPTS = frozenset({
+    'scripts/dev.mjs', 'scripts/build-teacher-guide.mjs',
+    'scripts/check-package.mjs', 'scripts/desktop-smoke.ps1',
+    'scripts/installer-smoke.ps1', 'scripts/release-ui.mjs',
+    'scripts/package-source.py', 'scripts/check-release-secrets.py',
+    'scripts/release_safety.py',
 })
 SOURCE_DIRECTORIES = ('server', 'src', 'electron', 'public', 'tests', 'scripts', 'docs', '.github')
 ASSETS = frozenset({
@@ -25,7 +29,6 @@ ASSETS = frozenset({
 EXTENSIONS = {
     'server': frozenset({'.mjs'}),
     'src': frozenset({'.ts', '.tsx', '.css'}),
-    'scripts': frozenset({'.mjs', '.py', '.ps1'}),
     'docs': frozenset({'.md'}),
 }
 PATTERNS = (
@@ -67,7 +70,7 @@ def approved_path(name):
     parts = p.parts
     if not parts or p.is_absolute() or '..' in parts:
         return False
-    if name in ROOT_FILES or name in ASSETS:
+    if name in ROOT_FILES or name in ASSETS or name in PUBLIC_SCRIPTS:
         return True
     if any(part.startswith('.') for part in parts):
         return False

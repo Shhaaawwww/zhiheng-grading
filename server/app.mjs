@@ -1,7 +1,7 @@
 import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { gzipSync, gunzipSync } from "node:zlib";
 import { z } from "zod";
 import { Store } from "./store.mjs";
@@ -39,6 +39,7 @@ import {
 } from "./imports.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const { version } = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
 const summary = (e) => ({
   id: e.id,
   name: e.name,
@@ -164,7 +165,7 @@ export function createApp(options = {}) {
   registerTeachingRoutes(app, store);
   registerAssessmentRoutes(app, store);
   app.get("/api/health", (_req, res) =>
-    res.json({ ok: true, version: "0.3.0" }),
+    res.json({ ok: true, version }),
   );
   app.get("/api/bootstrap", (_req, res) =>
     res.json({
